@@ -16,6 +16,7 @@ const parseCsv = (text) => {
       name: 'Código',
       selector: row => row.codigo,
       filterable: true,
+      width: "80px"    
     },
     {
       id: 'interprete',
