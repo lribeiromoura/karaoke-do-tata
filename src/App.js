@@ -1,25 +1,82 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {
+  useEffect,
+  useState
+} from 'react';
+import DataGrid from './DataGrid';
+import SearchInput from './SearchInput';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const parseCsv = (text) => {
+  const result = {
+    header: [],
+    data: []
+  }
+  const [header, ...content] = text.split('\n');
+  const columns = [{
+      id: 'interprete',
+      name: 'Interprete',
+      selector: row => row.interprete,
+      filterable: true,
+    },
+    {
+      id: 'codigo',
+      name: 'Código',
+      selector: row => row.codigo,
+      filterable: true,
+    },
+    {
+      id: 'nome',
+      name: 'Nome',
+      selector: row => row.nome,
+      filterable: true,
+    },
+    {
+      id: 'trecho',
+      name: 'Trecho',
+      selector: row => row.trecho,
+      filterable: true,
+    },
+    {
+      id: 'idioma',
+      name: 'Idioma',
+      selector: row => row.idioma,
+      filterable: true,
+    },
+  ];
+
+  content.forEach(item => {
+    let itemSplited = item.split(';');
+    let itemObj = {
+      interprete: itemSplited[0] ? itemSplited[0].replace(/"/g,"") : '',
+      codigo: itemSplited[1] ? itemSplited[1].replace(/"/g,"") : '',
+      nome: itemSplited[2] ? itemSplited[2].replace(/"/g,"") : '',
+      trecho: itemSplited[3] ? itemSplited[3].replace(/"/g,"") : '',
+      idioma: itemSplited[4] ? itemSplited[4].replace(/"/g,"") : ''
+    }
+    if(!itemObj.interprete || !itemObj.codigo) {
+      return;
+    }
+    result.data.push(itemObj)
+  });
+  result.header = columns;
+  console.log(result)
+  return result
 }
 
-export default App;
+export default function App() {
+  const [csv, setCsv] = useState(null);
+
+  useEffect(() => {
+    fetch('arquivo.csv')
+      .then((r) => r.text())
+      .then((text) => {
+        setCsv(parseCsv(text))
+      });
+  }, []);
+
+  return( 
+    <div className = "App" >
+      <DataGrid csv = { csv } > 
+      </DataGrid> 
+    </div > 
+  )
+}
