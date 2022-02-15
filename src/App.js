@@ -10,16 +10,17 @@ const parseCsv = (text) => {
     data: []
   }
   const [header, ...content] = text.split('\n');
-  const columns = [{
-      id: 'interprete',
-      name: 'Interprete',
-      selector: row => row.interprete,
-      filterable: true,
-    },
+  const columns = [
     {
       id: 'codigo',
       name: 'Código',
       selector: row => row.codigo,
+      filterable: true,
+    },
+    {
+      id: 'interprete',
+      name: 'Interprete',
+      selector: row => row.interprete,
       filterable: true,
     },
     {
@@ -45,8 +46,8 @@ const parseCsv = (text) => {
   content.forEach(item => {
     let itemSplited = item.split(';');
     let itemObj = {
-      interprete: itemSplited[0] ? itemSplited[0].replace(/"/g,"") : '',
       codigo: itemSplited[1] ? itemSplited[1].replace(/"/g,"") : '',
+      interprete: itemSplited[0] ? itemSplited[0].replace(/"/g,"") : '',
       nome: itemSplited[2] ? itemSplited[2].replace(/"/g,"") : '',
       trecho: itemSplited[3] ? itemSplited[3].replace(/"/g,"") : '',
       idioma: itemSplited[4] ? itemSplited[4].replace(/"/g,"") : ''
