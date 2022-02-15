@@ -3,7 +3,6 @@ import React, {
   useState
 } from 'react';
 import DataGrid from './DataGrid';
-import SearchInput from './SearchInput';
 
 const parseCsv = (text) => {
   const result = {
